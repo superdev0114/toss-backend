@@ -51,6 +51,9 @@ export const storeGameData = async (req: Request, res: Response) => {
             res.json({ result: "ERROR", error: "Missing required arguments" });
 
         const gameData = await UserHash.findOne({ userhash })
+        if (gameData.streaks > 1) {
+            res.json({ result: "ERROR", error: "Minium streak point is 2" });
+        }
 
         const isExist = await Wallets.find({ wallet_adress: address });
         if (isExist.length !== 0) {
@@ -91,35 +94,3 @@ export const playGame = async (req: Request, res: Response) => {
         return res.status(400).json('Interanal server error');
     }
 }
-
-// export const create = async (req: Request, res: Response) => {
-//     try {
-//         const { userhash } = req.query;
-//         if (!userhash)
-//             res.json({ result: "ERROR", error: "Missing required arguments" });
-
-//         const isExist = await UserHash.find({ userhash });
-//         if (isExist.length !== 0) {
-//             update(req, res);
-//         } else {
-//             const newDoc = new UserHash({ userhash })
-//             const newData = await newDoc.save()
-//             res.json({ success: true, data: newData });
-//         }
-//     } catch (error: any) {
-//         console.error(`error`, error);
-//         return res.status(400).json('Interanal server error');
-//     }
-// };
-
-// const update = async (req: Request, res: Response) => {
-//     try {
-//         const { contract, traits } = req.body;
-
-//         const updateData = await Traits.findOneAndUpdate({ contract }, { traits: JSON.stringify(traits) })
-//         res.json({ success: true, data: updateData });
-//     } catch (error: any) {
-//         console.error(`error`, error);
-//         return res.status(400).json('Interanal server error');
-//     }
-// }
