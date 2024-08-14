@@ -1,0 +1,49 @@
+{
+  "name": "toss-backend",
+  "version": "1.0.0",
+  "description": "toss backend",
+  "scripts": {
+    "build": "tsc",
+    "watch-tsc": "tsc -w",
+    "deploy": "node dist/src/index.js",
+    "watch-deploy": "nodemon dist/src/index.js",
+    "server": "concurrently \"npm run watch-tsc\" \"npm run watch-deploy\"",
+    "start": "npm run deploy",
+    "dev": "nodemon src/index.ts --exec ts-node",
+    "heroku-postbuild": "npm run tsc"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.13",
+    "axios": "^1.5.0",
+    "body-parser": "^1.20.2",
+    "config": "^3.3.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-joi-validation": "^5.0.1",
+    "http-status-codes": "^2.2.0",
+    "joi": "^17.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
+    "mongoose": "^6.8.0",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4",
+    "web3": "^1.8.1"
+  },
+  "devDependencies": {
+    "@types/config": "3.3.0",
+    "@types/express": "^4.17.15",
+    "@types/gravatar": "^1.8.3",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/mongoose": "^5.11.97",
+    "@types/multer": "^1.4.11",
+    "concurrently": "^7.6.0",
+    "nodemon": "^2.0.20"
+  },
+  "exports": {
+    "./lib/util/namespace": "./lib/util/namespace.js"
+  }
+}
