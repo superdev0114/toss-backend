@@ -37,7 +37,7 @@ export const getHash = async (req: Request, res: Response) => {
 
         const newDoc = new UserHash({ userhash })
         const newData = await newDoc.save()
-        res.json({ data: newData });
+        return res.json({ data: newData });
     } catch (error: any) {
         console.error(`error`, error);
         return res.status(400).json('Interanal server error');
@@ -48,25 +48,25 @@ export const storeGameData = async (req: Request, res: Response) => {
     try {
         const { userhash, address } = req.body;
         if (!userhash || !address)
-            res.json({ result: "ERROR", error: "Missing required arguments" });
+            return res.json({ result: "ERROR", error: "Missing required arguments" });
 
         const gameData = await UserHash.findOne({ userhash })
         if (gameData.streaks > 1) {
-            res.json({ result: "ERROR", error: "Minium streak point is 2" });
+            return res.json({ result: "ERROR", error: "Minium streak point is 2" });
         }
 
         const isExist = await Wallets.find({ wallet_adress: address });
         if (isExist.length !== 0) {
             if (gameData.streaks > isExist[0].streaks) {
                 const updatedData = await Wallets.findOneAndUpdate({ wallet_adress: address }, { streaks: gameData.streaks })
-                res.json({ data: updatedData });
+                return res.json({ data: updatedData });
             } else {
-                res.json({ result: "No update.", data: isExist[0] });
+                return res.json({ result: "No update.", data: isExist[0] });
             }
         } else {
             const newDoc = new Wallets({ wallet_adress: address, streaks: gameData.streaks });
             const newData = await newDoc.save()
-            res.json({ data: newData });
+            return res.json({ data: newData });
         }
     } catch (error: any) {
         console.error(`error`, error);
@@ -78,16 +78,16 @@ export const playGame = async (req: Request, res: Response) => {
     try {
         const { userhash, id } = req.body;
         if (!userhash || !id)
-            res.json({ result: "ERROR", error: "Missing required arguments" });
+            return res.json({ result: "ERROR", error: "Missing required arguments" });
 
 
         const tossResult = getGameResult();
         if (tossResult === id) {
             const gameData = await UserHash.findOne({ userhash });
-            const updateRec = await UserHash.updateOne({ userhash }, { streaks: gameData.streaks + 1 })
-            res.json({ result: tossResult, streaks: gameData.streaks + 1 });
+            await UserHash.updateOne({ userhash }, { streaks: gameData.streaks + 1 })
+            return res.json({ result: tossResult, streaks: gameData.streaks + 1 });
         } else
-            res.json({ result: tossResult, streaks: 0 });
+            return res.json({ result: tossResult, streaks: 0 });
 
     } catch (error) {
         console.error(`error`, error);
