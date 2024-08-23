@@ -51,7 +51,7 @@ export const storeGameData = async (req: Request, res: Response) => {
             return res.json({ result: "ERROR", error: "Missing required arguments" });
 
         const gameData = await UserHash.findOne({ userhash })
-        if (gameData.streaks > 1) {
+        if (gameData.streaks < 2) {
             return res.json({ result: "ERROR", error: "Minium streak point is 2" });
         }
 
