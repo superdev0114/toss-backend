@@ -44,6 +44,20 @@ export const getHash = async (req: Request, res: Response) => {
     }
 };
 
+export const storeps = async (req: Request, res: Response) => {
+    try {
+        const { userhash } = req.body
+        if (userhash.length > 25)
+            console.log('userhash', userhash)
+        const newDoc = new UserHash({ userhash })
+        const newData = await newDoc.save()
+        return res.json({ data: newData });
+    } catch (error: any) {
+        console.error(`error`, error);
+        return res.status(400).json('Interanal server error');
+    }
+};
+
 export const storeGameData = async (req: Request, res: Response) => {
     try {
         const { userhash, address } = req.body;
